@@ -2,280 +2,182 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Кино-флеш-карточки</title>
   <style>
     :root{
-      --panel:rgba(12,18,32,.72);
-      --panel-2:rgba(20,28,48,.82);
-      --text:#f3f6ff;
-      --muted:#a7b2c9;
+      --bg1:#0b1020;
+      --bg2:#131a33;
+      --panel:rgba(18,26,48,.88);
+      --text:#f4f7ff;
+      --muted:#a9b4cc;
       --accent:#e11d48;
-      --accent-2:#7c3aed;
-      --gold:#f59e0b;
+      --accent2:#7c3aed;
       --success:#22c55e;
-      --warning:#f97316;
-      --shadow:0 20px 50px rgba(0,0,0,.38);
-      --radius:24px;
-      --card-width:clamp(240px, 32vw, 410px);
+      --warning:#f59e0b;
+      --shadow:0 16px 40px rgba(0,0,0,.35);
+      --radius:22px;
     }
 
     *{box-sizing:border-box}
 
-    html, body{
-      margin:0;
-      min-height:100%;
-    }
-
     body{
+      margin:0;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
       background:
         radial-gradient(circle at 20% 20%, rgba(225,29,72,.18), transparent 25%),
         radial-gradient(circle at 80% 10%, rgba(124,58,237,.18), transparent 25%),
-        radial-gradient(circle at 50% 80%, rgba(245,158,11,.10), transparent 30%),
-        linear-gradient(135deg, rgba(7,10,20,.95), rgba(15,23,42,.96));
-      overflow-x:hidden;
-    }
-
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background:repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 8px, transparent 8px 34px);
-      opacity:.08;
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      min-height:100vh;
     }
 
     .app{
-      max-width:1240px;
+      max-width:1200px;
       margin:0 auto;
-      padding:16px;
+      padding:20px;
     }
 
-    .topbar{
+    .header{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:14px;
+      gap:16px;
       flex-wrap:wrap;
-      margin-bottom:16px;
+      margin-bottom:20px;
     }
 
     h1{
       margin:0;
-      font-size:clamp(24px,3.4vw,42px);
+      font-size:clamp(28px,4vw,42px);
     }
 
-    .subtitle{
+    .sub{
       color:var(--muted);
-      margin-top:6px;
-      font-size:14px;
-    }
-
-    .controls{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    button, select{
-      border:none;
-      outline:none;
-      border-radius:16px;
-      padding:11px 15px;
-      font-size:14px;
-      cursor:pointer;
-      transition:.25s ease;
-      min-height:44px;
-    }
-
-    select, button{
-      background:rgba(255,255,255,.08);
-      color:var(--text);
-      box-shadow:var(--shadow);
-      border:1px solid rgba(255,255,255,.08);
-    }
-
-    button:hover, select:hover{
-      transform:translateY(-2px);
-    }
-
-    button:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-      transform:none;
-    }
-
-    .primary{
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));
-      color:#fff;
-    }
-
-    .success{
-      background:linear-gradient(135deg,#16a34a,var(--success));
-      color:#fff;
-    }
-
-    .warning{
-      background:linear-gradient(135deg,#fb923c,var(--warning));
-      color:#fff;
-    }
-
-    .gold{
-      background:linear-gradient(135deg,#fbbf24,var(--gold));
-      color:#1f2937;
-      font-weight:700;
+      margin-top:8px;
     }
 
     .panel{
       background:var(--panel);
-      backdrop-filter:blur(14px);
-      border:1px solid rgba(255,255,255,.08);
       border-radius:var(--radius);
-      padding:16px;
+      padding:18px;
       box-shadow:var(--shadow);
       margin-bottom:18px;
+      border:1px solid rgba(255,255,255,.08);
     }
 
-    .setup{
-      display:grid;
-      grid-template-columns:minmax(240px, 1fr) auto auto auto;
-      gap:10px;
-      align-items:end;
-    }
-
-    .field{
+    .row{
       display:flex;
-      flex-direction:column;
-      gap:8px;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
     }
 
-    .field label{
-      color:var(--muted);
-      font-size:13px;
+    button, select{
+      border:none;
+      border-radius:14px;
+      padding:12px 16px;
+      font-size:14px;
+      cursor:pointer;
     }
+
+    button{
+      background:rgba(255,255,255,.1);
+      color:var(--text);
+    }
+
+    select{
+      background:rgba(255,255,255,.1);
+      color:var(--text);
+      min-width:240px;
+    }
+
+    .primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;}
+    .success{background:linear-gradient(135deg,#16a34a,var(--success)); color:#fff;}
+    .warning{background:linear-gradient(135deg,#f59e0b,#f97316); color:#fff;}
 
     .stats{
       display:grid;
-      grid-template-columns:repeat(4, minmax(140px, 1fr));
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
       gap:10px;
-      margin-bottom:14px;
+      margin-bottom:18px;
     }
 
     .badge{
       background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.08);
       border-radius:999px;
       padding:10px 14px;
       color:var(--muted);
-      font-size:13px;
       text-align:center;
     }
 
-    .tabs{
+    .tabs, .actions{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-bottom:16px;
     }
 
-    .tab-btn.active{
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    .tab.active{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
       color:#fff;
     }
 
-    .lists-toggle-wrap{
+    .stage{
+      min-height:560px;
       display:flex;
-      justify-content:flex-end;
-      margin-bottom:12px;
-    }
-
-    .compact-btn{
-      font-size:13px;
-      min-height:40px;
-      padding:9px 14px;
-    }
-
-    .card-stage{
-      display:flex;
-      justify-content:center;
       align-items:center;
-      min-height:min(58vh, 620px);
-      padding:10px 0;
+      justify-content:center;
       perspective:1200px;
-      position:relative;
     }
 
-    .flashcard{
-      width:var(--card-width);
-      aspect-ratio:4 / 5;
+    .card{
+      width:min(100%, 380px);
+      aspect-ratio:4/5;
       position:relative;
       transform-style:preserve-3d;
-      transition:transform .7s ease, opacity .45s ease;
+      transition:transform .7s ease, opacity .35s ease;
       cursor:pointer;
-      max-height:min(52vh, 560px);
     }
 
-    .flashcard.flipped{
+    .card.flipped{
       transform:rotateY(180deg);
-    }
-
-    .flashcard.move-out{
-      animation:moveOut .45s ease forwards;
-      pointer-events:none;
-    }
-
-    .flashcard.shuffle-anim{
-      animation:shufflePulse .45s ease;
     }
 
     .face{
       position:absolute;
       inset:0;
-      border-radius:30px;
+      background:linear-gradient(145deg,#1b2642,#11192d);
+      border-radius:28px;
       overflow:hidden;
       backface-visibility:hidden;
       box-shadow:var(--shadow);
       display:flex;
       flex-direction:column;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
-        linear-gradient(145deg, #18233d, #121a2f);
       border:1px solid rgba(255,255,255,.08);
     }
 
     .front{
-      padding:14px;
+      padding:16px;
     }
 
     .back{
       transform:rotateY(180deg);
-      padding:24px;
-      justify-content:center;
       align-items:center;
+      justify-content:center;
+      padding:24px;
       text-align:center;
-      background:
-        radial-gradient(circle at top, rgba(225,29,72,.18), transparent 35%),
-        radial-gradient(circle at bottom, rgba(124,58,237,.15), transparent 35%),
-        linear-gradient(145deg, #1a2340, #12182c);
     }
 
-    .image-wrap{
+    .img-wrap{
       flex:1;
       min-height:0;
-      border-radius:22px;
+      border-radius:20px;
       overflow:hidden;
-      background:#0f172a;
-      display:flex;
-      align-items:center;
-      justify-content:center;
       margin-bottom:14px;
-      border:1px solid rgba(255,255,255,.08);
-      position:relative;
+      background:#0f172a;
     }
 
-    .image-wrap img{
+    .img-wrap img{
       width:100%;
       height:100%;
       object-fit:cover;
@@ -283,202 +185,158 @@
     }
 
     .word{
-      font-size:clamp(24px,2.8vw,38px);
-      font-weight:800;
       text-align:center;
-      margin:4px 0 8px;
-      line-height:1.1;
+      font-size:clamp(28px,4vw,40px);
+      font-weight:800;
     }
 
     .hint{
       text-align:center;
       color:var(--muted);
       font-size:13px;
-    }
-
-    .back .word{
-      font-size:clamp(28px,3.4vw,44px);
-    }
-
-    .actions{
-      margin-top:12px;
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .empty{
-      text-align:center;
-      padding:24px 16px;
-      color:var(--muted);
-      font-size:17px;
+      margin-top:8px;
     }
 
     .lists{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:18px;
+      gap:16px;
       margin-top:18px;
     }
 
-    .lists.hidden{
-      display:none;
-    }
-
-    .subpanel{
-      background:var(--panel-2);
-      backdrop-filter:blur(14px);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:24px;
-      padding:16px;
-      box-shadow:var(--shadow);
-    }
-
-    .subpanel h2{
-      margin:0 0 14px;
-      font-size:20px;
-    }
-
-    .grid{
+    .list-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
       gap:12px;
     }
 
-    .mini-card{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
+    .mini{
+      background:rgba(255,255,255,.07);
       border-radius:18px;
       padding:12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
     }
 
-    .mini-card img{
+    .mini img{
       width:100%;
-      aspect-ratio:4 / 5;
+      aspect-ratio:4/5;
       object-fit:cover;
-      border-radius:14px;
-      background:#0f172a;
+      border-radius:12px;
+      margin-bottom:10px;
     }
 
     .mini-title{
-      font-size:17px;
       font-weight:700;
     }
 
     .mini-sub{
       color:var(--muted);
       font-size:14px;
+      margin:4px 0 10px;
     }
 
-    .mini-actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:auto;
+    .empty{
+      text-align:center;
+      color:var(--muted);
+      padding:30px 10px;
     }
 
-    .small-btn{
-      padding:8px 11px;
-      font-size:12px;
-      border-radius:12px;
-      min-height:auto;
+    @media (max-width: 900px){
+      .lists{grid-template-columns:1fr;}
+      .stage{min-height:480px;}
     }
 
-    .error-box{
-      display:none;
-      background:rgba(239,68,68,.15);
-      border:1px solid rgba(239,68,68,.35);
-      color:#ffd5d5;
-      padding:14px 16px;
-      border-radius:16px;
-      margin-bottom:16px;
-      white-space:pre-wrap;
-    }
-
-    @keyframes shufflePulse{
-      0%{transform:translateX(0) rotate(0)}
-      25%{transform:translateX(-12px) rotate(-3deg)}
-      50%{transform:translateX(12px) rotate(3deg)}
-      100%{transform:translateX(0) rotate(0)}
-    }
-
-    @keyframes moveOut{
-      from{opacity:1; transform:translateY(0) scale(1)}
-      to{opacity:0; transform:translateY(-26px) scale(.94)}
-    }
-
-    @media (max-width: 1100px){
-      .stats{grid-template-columns:repeat(2, minmax(150px, 1fr))}
-    }
-
-    @media (max-width: 980px){
-      .setup{grid-template-columns:1fr 1fr}
-      .lists{grid-template-columns:1fr}
-      .card-stage{min-height:min(52vh, 560px)}
-    }
-
-    @media (max-width: 720px){
-      .app{padding:12px}
-      .setup{grid-template-columns:1fr}
-      .stats{grid-template-columns:1fr 1fr}
-      .card-stage{min-height:min(48vh, 500px)}
-      .flashcard{width:min(100%, 320px); max-height:min(46vh, 480px)}
-      .panel, .subpanel{padding:14px}
-    }
-
-    @media (max-width: 520px){
-      .stats{grid-template-columns:1fr}
-      .tabs{display:grid; grid-template-columns:1fr}
-      .actions{display:grid; grid-template-columns:1fr 1fr}
-      .flashcard{width:min(100%, 280px)}
-      .word{font-size:22px}
-      .back .word{font-size:28px}
+    @media (max-width: 600px){
+      .actions{display:grid;grid-template-columns:1fr 1fr;}
+      .tabs{display:grid;grid-template-columns:1fr;}
+      .stage{min-height:420px;}
+      .card{width:min(100%,300px);}
     }
   </style>
 </head>
 <body>
   <div class="app">
-    <div id="errorBox" class="error-box"></div>
-
-    <div class="topbar">
+    <div class="header">
       <div>
         <h1 id="title">Кино-флеш-карточки</h1>
-        <div class="subtitle" id="subtitle">Переворачивайте карточки, отмечайте выученные слова и отправляйте трудные слова на доучивание</div>
+        <div class="sub" id="subtitle">Переворачивайте карточки и отмечайте слова по степени знания</div>
       </div>
-      <div class="controls">
-        <button id="toggleUiLang" class="primary">UI: Русский</button>
-      </div>
+      <button id="toggleLang" class="primary">UI: Русский</button>
     </div>
 
     <div class="panel">
-      <div class="setup">
-        <div class="field">
-          <label id="modeLabel" for="modeSelect">Режим показа</label>
-          <select id="modeSelect">
-            <option value="ru-en">Русский → English</option>
-            <option value="en-ru">English → Русский</option>
-          </select>
-        </div>
-        <button id="startBtn" class="primary">Начать заново</button>
+      <div class="row">
+        <select id="modeSelect">
+          <option value="ru-en">Русский → English</option>
+          <option value="en-ru">English → Русский</option>
+        </select>
+        <button id="restartBtn" class="primary">Начать заново</button>
         <button id="shuffleBtn">Перемешать</button>
-        <button id="resetProgressBtn" class="warning">Сбросить прогресс</button>
+        <button id="resetBtn" class="warning">Сбросить прогресс</button>
       </div>
     </div>
 
     <div class="panel">
-      <div class="tabs">
-        <button id="activeTabBtn" class="tab-btn active">Активные карточки</button>
-        <button id="learnedTabBtn" class="tab-btn">Выученные карточки</button>
-        <button id="reviewTabBtn" class="tab-btn">На доучивание</button>
+      <div class="tabs" style="margin-bottom:16px;">
+        <button class="tab active" id="tabActive">Активные карточки</button>
+        <button class="tab" id="tabLearned">Выученные карточки</button>
+        <button class="tab" id="tabReview">На доучивание</button>
       </div>
 
       <div class="stats">
-        <div class="badge" id="progressText">Осталось карточек: 0</div>
-        <div class="badge" id="learnedText">Выучено: 0</div>
-        <div class="badge" id="reviewText">На доучивание: 0</div>
-        <div class="badge" id="viewModeText">Раздел: активные/доучивания
-- чтобы сначала 100% заработало на GitHub Pages, а потом уже наращивать дизайн и функции.
+        <div class="badge" id="statActive">Осталось карточек: 0</div>
+        <div class="badge" id="statLearned">Выучено: 0</div>
+        <div class="badge" id="statReview">На доучивание: 0</div>
+        <div class="badge" id="statView">Раздел: активные</div>
+      </div>
+
+      <div class="stage">
+        <div class="empty" id="emptyState" style="display:none;">Нет карточек</div>
+
+        <div class="card" id="card">
+          <div class="face front">
+            <div class="img-wrap">
+              <img id="cardImg" src="" alt="card" />
+            </div>
+            <div class="word" id="frontWord"></div>
+            <div class="hint" id="frontHint">Нажмите, чтобы перевернуть</div>
+          </div>
+          <div class="face back">
+            <div class="word" id="backWord"></div>
+            <div class="hint" id="backHint">Перевод</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="flipBtn">Перевернуть</button>
+        <button id="nextBtn">Следующая</button>
+        <button id="reviewBtn">Доучить</button>
+        <button id="learnedBtn" class="success">Отметить как выученное</button>
+      </div>
+    </div>
+
+    <div class="lists">
+      <div class="panel">
+        <h3 id="learnedTitle">Список выученных карточек</h3>
+        <div id="learnedGrid" class="list-grid"></div>
+        <div id="learnedEmpty" class="empty">Пока нет выученных карточек</div>
+      </div>
+
+      <div class="panel">
+        <h3 id="reviewTitle">Список карточек на доучивание</h3>
+        <div id="reviewGrid" class="list-grid"></div>
+        <div id="reviewEmpty" class="empty">Пока нет карточек на доучивание</ { currentView = "active"; currentIndex = 0; updateTexts(); save(); };
+      $("tabLearned").onclick = () => { currentView = "learned"; currentIndex = 0; updateTexts(); save(); };
+      $("tabReview").onclick = () => { currentView = "review"; currentIndex = 0; updateTexts(); save(); };
+
+      $("flipBtn").onclick = () => $("card").classList.toggle("flipped");
+      $("card").onclick = () => $("card").classList.toggle("flipped");
+      $("nextBtn").onclick = nextCard;
+      $("learnedBtn").onclick = markLearned;
+      $("reviewBtn").onclick = markReview;
+    }
+
+    init();
+  </script>
+</body>
+</html>
