@@ -9,12 +9,14 @@
       --bg1:#0b1020;
       --bg2:#131a33;
       --panel:rgba(18,26,48,.88);
+      --panel2:rgba(22,31,56,.92);
       --text:#f4f7ff;
       --muted:#a9b4cc;
       --accent:#e11d48;
       --accent2:#7c3aed;
       --success:#22c55e;
       --warning:#f59e0b;
+      --review:#fbbf24;
       --shadow:0 16px 40px rgba(0,0,0,.35);
       --radius:22px;
     }
@@ -28,8 +30,22 @@
       background:
         radial-gradient(circle at 20% 20%, rgba(225,29,72,.18), transparent 25%),
         radial-gradient(circle at 80% 10%, rgba(124,58,237,.18), transparent 25%),
+        radial-gradient(circle at 50% 80%, rgba(245,158,11,.08), transparent 30%),
         linear-gradient(135deg,var(--bg1),var(--bg2));
       min-height:100vh;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,.03) 0 8px,
+        transparent 8px 34px
+      );
+      opacity:.08;
     }
 
     .app{
@@ -50,11 +66,13 @@
     h1{
       margin:0;
       font-size:clamp(28px,4vw,42px);
+      line-height:1.1;
     }
 
     .sub{
       color:var(--muted);
       margin-top:8px;
+      font-size:14px;
     }
 
     .panel{
@@ -64,6 +82,7 @@
       box-shadow:var(--shadow);
       margin-bottom:18px;
       border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(10px);
     }
 
     .row{
@@ -79,6 +98,12 @@
       padding:12px 16px;
       font-size:14px;
       cursor:pointer;
+      min-height:44px;
+      transition:.25s ease;
+    }
+
+    button:hover, select:hover{
+      transform:translateY(-2px);
     }
 
     button{
@@ -90,11 +115,41 @@
       background:rgba(255,255,255,.1);
       color:var(--text);
       min-width:240px;
+      flex:1;
     }
 
-    .primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;}
-    .success{background:linear-gradient(135deg,#16a34a,var(--success)); color:#fff;}
-    .warning{background:linear-gradient(135deg,#f59e0b,#f97316); color:#fff;}
+    .primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff;
+    }
+
+    .success{
+      background:linear-gradient(135deg,#16a34a,var(--success));
+      color:#fff;
+    }
+
+    .warning{
+      background:linear-gradient(135deg,#f59e0b,#f97316);
+      color:#fff;
+    }
+
+    .review-btn{
+      background:linear-gradient(135deg,#fbbf24,#f59e0b);
+      color:#1f2937;
+      font-weight:700;
+    }
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .tab.active{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff;
+    }
 
     .stats{
       display:grid;
@@ -109,17 +164,7 @@
       padding:10px 14px;
       color:var(--muted);
       text-align:center;
-    }
-
-    .tabs, .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .tab.active{
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#fff;
+      border:1px solid rgba(255,255,255,.06);
     }
 
     .stage{
@@ -128,10 +173,11 @@
       align-items:center;
       justify-content:center;
       perspective:1200px;
+      position:relative;
     }
 
     .card{
-      width:min(100%, 380px);
+      width:min(100%, 390px);
       aspect-ratio:4/5;
       position:relative;
       transform-style:preserve-3d;
@@ -141,6 +187,12 @@
 
     .card.flipped{
       transform:rotateY(180deg);
+    }
+
+    .card.out{
+      opacity:0;
+      transform:translateY(-20px) scale(.96);
+      pointer-events:none;
     }
 
     .face{
@@ -166,6 +218,10 @@
       justify-content:center;
       padding:24px;
       text-align:center;
+      background:
+        radial-gradient(circle at top, rgba(225,29,72,.18), transparent 35%),
+        radial-gradient(circle at bottom, rgba(124,58,237,.18), transparent 35%),
+        linear-gradient(145deg,#1c2746,#131b31);
     }
 
     .img-wrap{
@@ -175,6 +231,7 @@
       overflow:hidden;
       margin-bottom:14px;
       background:#0f172a;
+      border:1px solid rgba(255,255,255,.06);
     }
 
     .img-wrap img{
@@ -188,6 +245,7 @@
       text-align:center;
       font-size:clamp(28px,4vw,40px);
       font-weight:800;
+      line-height:1.1;
     }
 
     .hint{
@@ -197,11 +255,36 @@
       margin-top:8px;
     }
 
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:16px;
+    }
+
+    .empty{
+      text-align:center;
+      color:var(--muted);
+      padding:30px 10px;
+      font-size:18px;
+    }
+
+    .lists-toggle{
+      display:flex;
+      justify-content:flex-end;
+      margin-bottom:12px;
+    }
+
     .lists{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:16px;
       margin-top:18px;
+    }
+
+    .lists.hidden{
+      display:none;
     }
 
     .list-grid{
@@ -210,10 +293,23 @@
       gap:12px;
     }
 
+    .mini-panel{
+      background:var(--panel2);
+      border-radius:20px;
+      padding:16px;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+    }
+
+    .mini-panel h3{
+      margin:0 0 14px;
+    }
+
     .mini{
       background:rgba(255,255,255,.07);
       border-radius:18px;
       padding:12px;
+      border:1px solid rgba(255,255,255,.06);
     }
 
     .mini img{
@@ -222,10 +318,12 @@
       object-fit:cover;
       border-radius:12px;
       margin-bottom:10px;
+      display:block;
     }
 
     .mini-title{
       font-weight:700;
+      font-size:17px;
     }
 
     .mini-sub{
@@ -234,22 +332,43 @@
       margin:4px 0 10px;
     }
 
-    .empty{
-      text-align:center;
-      color:var(--muted);
-      padding:30px 10px;
+    .mini-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .mini button{
+      padding:9px 12px;
+      min-height:auto;
+      font-size:12px;
+      border-radius:12px;
     }
 
     @media (max-width: 900px){
-      .lists{grid-template-columns:1fr;}
-      .stage{min-height:480px;}
+      .lists{
+        grid-template-columns:1fr;
+      }
+      .stage{
+        min-height:480px;
+      }
     }
 
     @media (max-width: 600px){
-      .actions{display:grid;grid-template-columns:1fr 1fr;}
-      .tabs{display:grid;grid-template-columns:1fr;}
-      .stage{min-height:420px;}
-      .card{width:min(100%,300px);}
+      .actions{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+      }
+      .tabs{
+        display:grid;
+        grid-template-columns:1fr;
+      }
+      .stage{
+        min-height:420px;
+      }
+      .card{
+        width:min(100%,300px);
+      }
     }
   </style>
 </head>
@@ -276,7 +395,7 @@
     </div>
 
     <div class="panel">
-      <div class="tabs" style="margin-bottom:16px;">
+      <div class="tabs">
         <button class="tab active" id="tabActive">Активные карточки</button>
         <button class="tab" id="tabLearned">Выученные карточки</button>
         <button class="tab" id="tabReview">На доучивание</button>
@@ -287,6 +406,10 @@
         <div class="badge" id="statLearned">Выучено: 0</div>
         <div class="badge" id="statReview">На доучивание: 0</div>
         <div class="badge" id="statView">Раздел: активные</div>
+      </div>
+
+      <div class="lists-toggle">
+        <button id="toggleListsBtn">Скрыть списки</button>
       </div>
 
       <div class="stage">
@@ -300,6 +423,7 @@
             <div class="word" id="frontWord"></div>
             <div class="hint" id="frontHint">Нажмите, чтобы перевернуть</div>
           </div>
+
           <div class="face back">
             <div class="word" id="backWord"></div>
             <div class="hint" id="backHint">Перевод</div>
@@ -310,30 +434,494 @@
       <div class="actions">
         <button id="flipBtn">Перевернуть</button>
         <button id="nextBtn">Следующая</button>
-        <button id="reviewBtn">Доучить</button>
+        <button id="reviewBtn" class="review-btn">Доучить</button>
         <button id="learnedBtn" class="success">Отметить как выученное</button>
       </div>
     </div>
 
-    <div class="lists">
-      <div class="panel">
+    <div class="lists" id="lists">
+      <div class="mini-panel">
         <h3 id="learnedTitle">Список выученных карточек</h3>
         <div id="learnedGrid" class="list-grid"></div>
         <div id="learnedEmpty" class="empty">Пока нет выученных карточек</div>
       </div>
 
-      <div class="panel">
+      <div class="mini-panel">
         <h3 id="reviewTitle">Список карточек на доучивание</h3>
         <div id="reviewGrid" class="list-grid"></div>
-        <div id="reviewEmpty" class="empty">Пока нет карточек на доучивание</ { currentView = "active"; currentIndex = 0; updateTexts(); save(); };
-      $("tabLearned").onclick = () => { currentView = "learned"; currentIndex = 0; updateTexts(); save(); };
-      $("tabReview").onclick = () => { currentView = "review"; currentIndex = 0; updateTexts(); save(); };
+        <div id="reviewEmpty" class="empty">Пока нет карточек на доучивание</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "cinema_flashcards_clean_v1";
+
+    const cardsData = [
+      { id: "audience", ru: "Аудитория", en: "Audience", image: "https://i.postimg.cc/TpY8dN1g/audience.png" },
+      { id: "channels", ru: "Каналы", en: "Channels", image: "https://i.postimg.cc/rKF6VZsW/channels.png" },
+      { id: "character", ru: "Персонаж", en: "Character", image: "https://i.postimg.cc/svDFjHxY/character.png" },
+      { id: "hit", ru: "Хит", en: "Hit", image: "https://i.postimg.cc/D8yVvp01/hit.png" },
+      { id: "scene", ru: "Сцена", en: "Scene", image: "https://i.postimg.cc/Ln6d9Q5k/scene.jpg" },
+      { id: "series", ru: "Сериал", en: "Series", image: "https://i.postimg.cc/hfPFDZv1/series.jpg" },
+      { id: "special-effects", ru: "Спецэффекты", en: "Special effects", image: "https://i.postimg.cc/nCc8FSrY/special-effects.png" },
+      { id: "tv-shows", ru: "Телешоу", en: "TV shows", image: "https://i.postimg.cc/Ln6d9Q5V/tv-shows.png" },
+      { id: "viewer", ru: "Зритель", en: "Viewer", image: "https://i.postimg.cc/zVdsVwHH/viewer.jpg" }
+    ];
+
+    const ui = {
+      ru: {
+        title: "Кино-флеш-карточки",
+        subtitle: "Переворачивайте карточки и отмечайте слова по степени знания",
+        toggle: "UI: Русский",
+        modeRuEn: "Русский → English",
+        modeEnRu: "English → Русский",
+        restart: "Начать заново",
+        shuffle: "Перемешать",
+        reset: "Сбросить прогресс",
+        tabActive: "Активные карточки",
+        tabLearned: "Выученные карточки",
+        tabReview: "На доучивание",
+        statActive: (n) => `Осталось карточек: ${n}`,
+        statLearned: (n) => `Выучено: ${n}`,
+        statReview: (n) => `На доучивание: ${n}`,
+        view: (v) => `Раздел: ${v}`,
+        active: "активные",
+        learned: "выученные",
+        review: "доучивание",
+        flip: "Перевернуть",
+        next: "Следующая",
+        reviewBtn: "Доучить",
+        learnedBtn: "Отметить как выученное",
+        frontHint: "Нажмите, чтобы перевернуть",
+        backHint: "Перевод",
+        empty: "Нет карточек",
+        learnedTitle: "Список выученных карточек",
+        reviewTitle: "Список карточек на доучивание",
+        learnedEmpty: "Пока нет выученных карточек",
+        reviewEmpty: "Пока нет карточек на доучивание",
+        returnBtn: "Вернуть в активные",
+        moveBtn: "Переместить в выученные",
+        confirmReset: "Сбросить весь прогресс?",
+        hideLists: "Скрыть списки",
+        showLists: "Показать списки"
+      },
+      en: {
+        title: "Cinema Flashcards",
+        subtitle: "Flip cards and mark words by learning status",
+        toggle: "UI: English",
+        modeRuEn: "Russian → English",
+        modeEnRu: "English → Russian",
+        restart: "Restart",
+        shuffle: "Shuffle",
+        reset: "Reset progress",
+        tabActive: "Active cards",
+        tabLearned: "Learned cards",
+        tabReview: "Review queue",
+        statActive: (n) => `Cards left: ${n}`,
+        statLearned: (n) => `Learned: ${n}`,
+        statReview: (n) => `To review: ${n}`,
+        view: (v) => `Section: ${v}`,
+        active: "active",
+        learned: "learned",
+        review: "review",
+        flip: "Flip",
+        next: "Next",
+        reviewBtn: "Review later",
+        learnedBtn: "Mark as learned",
+        frontHint: "Click to flip",
+        backHint: "Translation",
+        empty: "No cards",
+        learnedTitle: "Learned cards list",
+        reviewTitle: "Cards for review",
+        learnedEmpty: "No learned cards yet",
+        reviewEmpty: "No review cards yet",
+        returnBtn: "Return to active",
+        moveBtn: "Move to learned",
+        confirmReset: "Reset all progress?",
+        hideLists: "Hide lists",
+        showLists: "Show lists"
+      }
+    };
+
+    let uiLang = "ru";
+    let mode = "ru-en";
+    let currentView = "active";
+    let activeCards = [];
+    let learnedCards = [];
+    let reviewCards = [];
+    let currentIndex = 0;
+    let listsVisible = true;
+
+    const $ = (id) => document.getElementById(id);
+
+    function cloneCards(arr){
+      return arr.map(card => ({ ...card }));
+    }
+
+    function shuffle(arr){
+      const copy = cloneCards(arr);
+      for(let i = copy.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function save(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        uiLang,
+        mode,
+        currentView,
+        activeCards,
+        learnedCards,
+        reviewCards,
+        currentIndex,
+        listsVisible
+      }));
+    }
+
+    function load(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw){
+          activeCards = shuffle(cardsData);
+          learnedCards = [];
+          reviewCards = [];
+          currentIndex = 0;
+          currentView = "active";
+          listsVisible = true;
+          return;
+        }
+
+        const data = JSON.parse(raw);
+        uiLang = data.uiLang || "ru";
+        mode = data.mode || "ru-en";
+        currentView = data.currentView || "active";
+        activeCards = Array.isArray(data.activeCards) ? data.activeCards : shuffle(cardsData);
+        learnedCards = Array.isArray(data.learnedCards) ? data.learnedCards : [];
+        reviewCards = Array.isArray(data.reviewCards) ? data.reviewCards : [];
+        currentIndex = Number.isInteger(data.currentIndex) ? data.currentIndex : 0;
+        listsVisible = typeof data.listsVisible === "boolean" ? data.listsVisible : true;
+
+        if(activeCards.length === 0 && learnedCards.length === 0 && reviewCards.length === 0){
+          activeCards = shuffle(cardsData);
+        }
+      }catch(e){
+        activeCards = shuffle(cardsData);
+        learnedCards = [];
+        reviewCards = [];
+        currentIndex = 0;
+        currentView = "active";
+        listsVisible = true;
+      }
+    }
+
+    function currentDeck(){
+      if(currentView === "learned") return learnedCards;
+      if(currentView === "review") return reviewCards;
+      return activeCards;
+    }
+
+    function currentCard(){
+      const deck = currentDeck();
+      return deck[currentIndex] || null;
+    }
+
+    function updateStats(){
+      const t = ui[uiLang];
+
+      $("statActive").textContent = t.statActive(activeCards.length);
+      $("statLearned").textContent = t.statLearned(learnedCards.length);
+      $("statReview").textContent = t.statReview(reviewCards.length);
+
+      let sectionName = t.active;
+      if(currentView === "learned") sectionName = t.learned;
+      if(currentView === "review") sectionName = t.review;
+      $("statView").textContent = t.view(sectionName);
+
+      $("tabActive").classList.toggle("active", currentView === "active");
+      $("tabLearned").classList.toggle("active", currentView === "learned");
+      $("tabReview").classList.toggle("active", currentView === "review");
+    }
+
+    function updateListsVisibility(){
+      const t = ui[uiLang];
+      $("lists").classList.toggle("hidden", !listsVisible);
+      $("toggleListsBtn").textContent = listsVisible ? t.hideLists : t.showLists;
+    }
+
+    function renderCard(){
+      const t = ui[uiLang];
+      const card = currentCard();
+      const cardEl = $("card");
+
+      cardEl.classList.remove("flipped");
+      cardEl.classList.remove("out");
+
+      if(!card){
+        cardEl.style.display = "none";
+        $("emptyState").style.display = "block";
+        $("emptyState").textContent = t.empty;
+        return;
+      }
+
+      cardEl.style.display = "block";
+      $("emptyState").style.display = "none";
+
+      $("frontWord").textContent = mode === "ru-en" ? card.ru : card.en;
+      $("backWord").textContent = mode === "ru-en" ? card.en : card.ru;
+      $("cardImg").src = card.image;
+      $("cardImg").alt = mode === "ru-en" ? card.ru : card.en;
+    }
+
+    function renderLists(){
+      const t = ui[uiLang];
+      const learnedGrid = $("learnedGrid");
+      const reviewGrid = $("reviewGrid");
+
+      learnedGrid.innerHTML = "";
+      reviewGrid.innerHTML = "";
+
+      $("learnedEmpty").style.display = learnedCards.length ? "none" : "block";
+      $("reviewEmpty").style.display = reviewCards.length ? "none" : "block";
+      $("learnedEmpty").textContent = t.learnedEmpty;
+      $("reviewEmpty").textContent = t.reviewEmpty;
+
+      learnedCards.forEach(card => {
+        const div = document.createElement("div");
+        div.className = "mini";
+        div.innerHTML = `
+          <img src="${card.image}" alt="${card.en}">
+          <div class="mini-title">${card.en}</div>
+          <div class="mini-sub">${card.ru}</div>
+          <div class="mini-actions">
+            <button data-id="${card.id}" data-from="learned">${t.returnBtn}</button>
+          </div>
+        `;
+        learnedGrid.appendChild(div);
+      });
+
+      reviewCards.forEach(card => {
+        const div = document.createElement("div");
+        div.className = "mini";
+        div.innerHTML = `
+          <img src="${card.image}" alt="${card.en}">
+          <div class="mini-title">${card.en}</div>
+          <div class="mini-sub">${card.ru}</div>
+          <div class="mini-actions">
+            <button data-id="${card.id}" data-from="review">${t.returnBtn}</button>
+            <button class="success" data-id="${card.id}" data-move="learned">${t.moveBtn}</button>
+          </div>
+        `;
+        reviewGrid.appendChild(div);
+      });
+
+      document.querySelectorAll("[data-from]").forEach(btn => {
+        btn.onclick = () => returnToActive(btn.dataset.id, btn.dataset.from);
+      });
+
+      document.querySelectorAll("[data-move='learned']").forEach(btn => {
+        btn.onclick = () => moveReviewToLearned(btn.dataset.id);
+      });
+    }
+
+    function updateTexts(){
+      const t = ui[uiLang];
+
+      $("title").textContent = t.title;
+      $("subtitle").textContent = t.subtitle;
+      $("toggleLang").textContent = t.toggle;
+      $("modeSelect").options[0].textContent = t.modeRuEn;
+      $("modeSelect").options[1].textContent = t.modeEnRu;
+      $("modeSelect").value = mode;
+      $("restartBtn").textContent = t.restart;
+      $("shuffleBtn").textContent = t.shuffle;
+      $("resetBtn").textContent = t.reset;
+      $("tabActive").textContent = t.tabActive;
+      $("tabLearned").textContent = t.tabLearned;
+      $("tabReview").textContent = t.tabReview;
+      $("flipBtn").textContent = t.flip;
+      $("nextBtn").textContent = t.next;
+      $("reviewBtn").textContent = t.reviewBtn;
+      $("learnedBtn").textContent = t.learnedBtn;
+      $("frontHint").textContent = t.frontHint;
+      $("backHint").textContent = t.backHint;
+      $("learnedTitle").textContent = t.learnedTitle;
+      $("reviewTitle").textContent = t.reviewTitle;
+
+      updateStats();
+      updateListsVisibility();
+      renderCard();
+      renderLists();
+    }
+
+    function nextCard(){
+      const deck = currentDeck();
+      if(!deck.length) return;
+      currentIndex = (currentIndex + 1) % deck.length;
+      renderCard();
+      save();
+    }
+
+    function markLearned(){
+      const card = currentCard();
+      if(!card) return;
+      if(currentView !== "active" && currentView !== "review") return;
+
+      $("card").classList.add("out");
+
+      setTimeout(() => {
+        if(currentView === "active"){
+          activeCards = activeCards.filter(c => c.id !== card.id);
+        } else {
+          reviewCards = reviewCards.filter(c => c.id !== card.id);
+        }
+
+        learnedCards.unshift(card);
+        currentIndex = 0;
+        updateTexts();
+        save();
+      }, 250);
+    }
+
+    function markReview(){
+      const card = currentCard();
+      if(!card || currentView !== "active") return;
+
+      $("card").classList.add("out");
+
+      setTimeout(() => {
+        activeCards = activeCards.filter(c => c.id !== card.id);
+        reviewCards.unshift(card);
+        currentIndex = 0;
+        updateTexts();
+        save();
+      }, 250);
+    }
+
+    function returnToActive(id, from){
+      let card = null;
+
+      if(from === "learned"){
+        card = learnedCards.find(c => c.id === id);
+        learnedCards = learnedCards.filter(c => c.id !== id);
+      } else if(from === "review"){
+        card = reviewCards.find(c => c.id === id);
+        reviewCards = reviewCards.filter(c => c.id !== id);
+      }
+
+      if(card){
+        activeCards.unshift(card);
+      }
+
+      currentIndex = 0;
+      updateTexts();
+      save();
+    }
+
+    function moveReviewToLearned(id){
+      const card = reviewCards.find(c => c.id === id);
+      if(!card) return;
+
+      reviewCards = reviewCards.filter(c => c.id !== id);
+      learnedCards.unshift(card);
+      currentIndex = 0;
+      updateTexts();
+      save();
+    }
+
+    function restart(){
+      activeCards = shuffle(cardsData);
+      learnedCards = [];
+      reviewCards = [];
+      currentView = "active";
+      currentIndex = 0;
+      mode = $("modeSelect").value;
+      updateTexts();
+      save();
+    }
+
+    function toggleLists(){
+      listsVisible = !listsVisible;
+      updateListsVisibility();
+      save();
+    }
+
+    function init(){
+      load();
+      updateTexts();
+
+      $("toggleLang").onclick = () => {
+        uiLang = uiLang === "ru" ? "en" : "ru";
+        updateTexts();
+        save();
+      };
+
+      $("modeSelect").onchange = () => {
+        mode = $("modeSelect").value;
+        renderCard();
+        save();
+      };
+
+      $("restartBtn").onclick = restart;
+
+      $("shuffleBtn").onclick = () => {
+        if(currentView === "active"){
+          activeCards = shuffle(activeCards);
+        } else if(currentView === "learned"){
+          learnedCards = shuffle(learnedCards);
+        } else {
+          reviewCards = shuffle(reviewCards);
+        }
+        currentIndex = 0;
+        updateTexts();
+        save();
+      };
+
+      $("resetBtn").onclick = () => {
+        if(confirm(ui[uiLang].confirmReset)){
+          localStorage.removeItem(STORAGE_KEY);
+          uiLang = "ru";
+          mode = "ru-en";
+          currentView = "active";
+          activeCards = shuffle(cardsData);
+          learnedCards = [];
+          reviewCards = [];
+          currentIndex = 0;
+          listsVisible = true;
+          updateTexts();
+          save();
+        }
+      };
+
+      $("tabActive").onclick = () => {
+        currentView = "active";
+        currentIndex = 0;
+        updateTexts();
+        save();
+      };
+
+      $("tabLearned").onclick = () => {
+        currentView = "learned";
+        currentIndex = 0;
+        updateTexts();
+        save();
+      };
+
+      $("tabReview").onclick = () => {
+        currentView = "review";
+        currentIndex = 0;
+        updateTexts();
+        save();
+      };
 
       $("flipBtn").onclick = () => $("card").classList.toggle("flipped");
       $("card").onclick = () => $("card").classList.toggle("flipped");
       $("nextBtn").onclick = nextCard;
       $("learnedBtn").onclick = markLearned;
       $("reviewBtn").onclick = markReview;
+      $("toggleListsBtn").onclick = toggleLists;
     }
 
     init();
